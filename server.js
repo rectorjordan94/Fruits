@@ -1,6 +1,4 @@
-
 //! Import Dependencies
-
 const express = require('express') // import the express framework
 const mongoose = require('mongoose') // import the mongoose library
 const morgan = require('morgan') // import the morgan request logger
@@ -28,7 +26,6 @@ mongoose.connection
 
 
 //! Create our Express App Object
-
 const app = express()
 
 
@@ -42,7 +39,6 @@ app.use(express.json()) // parses incoming request payloads with JSON
 
 
 //! Routes
-
 app.get('/', (req, res) => {
     res.send('Server is live, ready for requests')
 })
@@ -74,7 +70,49 @@ app.get('/fruits/seed', (req, res) => {
         })
 })
 
-//! Server Listener
+// INDEX route 
+// Read -> finds and displays all fruits
+app.get('/fruits', (req, res) => {
+    // find all the fruits
+    Fruit.find({})
+        // send json if successful
+        .then(fruits => { res.json({fruits: fruits})})
+        // catch errors if they occur
+        .catch(err => console.log('the following error occurred: \n', err))
+})
 
+//  SHOW route
+// Read -> finds and displays a single resource
+app.get('/fruits/:id', (req, res) => {
+    // get the id -> save to a variable
+    const id = req.params.id
+    // use a mongoose method to find using that id
+    Fruit.findById(id)
+        .then(fruit => {
+            // send the fruit as json upon success
+            res.json({fruit: fruit})
+        })
+    .catch(err => console.log(err))
+    // catch any errors
+})
+
+// CREATE route
+// Create -> receives a request body, and creates a new document in the database
+app.post('/fruits', (req, res) => {
+    // here we'll have something called a request body
+    // inside this function, that will be called req.body
+    // we want to pass our req.body to the create method
+    const newFruit = req.body
+    Fruit.create(newFruit)
+        .then(fruit => {
+            // send a 201 status, along with the json response of the new fruit
+            res.status(201).json({fruit: fruit.toObject()})
+        })
+        // send an error if one occurs
+        .catch(err => console.log(err))
+})
+
+
+//! Server Listener
 const PORT = process.env.PORT
 app.listen(PORT, () => console.log(`Listening on port: ${PORT}`))
