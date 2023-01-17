@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
     res.send('Server is live, ready for requests')
 })
 
-// we're going to build a seed route
+//* SEED route
 // this will seed the database for us with a few starter resources
 // there are two ways we will talk about seeding the database
 // First -> seed route, they work but they are not best practices
@@ -70,7 +70,7 @@ app.get('/fruits/seed', (req, res) => {
         })
 })
 
-// INDEX route 
+//* INDEX route 
 // Read -> finds and displays all fruits
 app.get('/fruits', (req, res) => {
     // find all the fruits
@@ -81,7 +81,7 @@ app.get('/fruits', (req, res) => {
         .catch(err => console.log('the following error occurred: \n', err))
 })
 
-// CREATE route
+//* CREATE route
 // Create -> receives a request body, and creates a new document in the database
 app.post('/fruits', (req, res) => {
     // here we'll have something called a request body
@@ -97,7 +97,7 @@ app.post('/fruits', (req, res) => {
         .catch(err => console.log(err))
 })
 
-// PUT route
+//* PUT route
 // Update -> updates a specific fruit
 //  PUT replaces the entire document with a new document from the req.body
 // PATCH is able to update specific fields at specific times, but it requires a little more code to ensure that it works properly, so we'll use that later
@@ -117,7 +117,7 @@ app.put('/fruits/:id', (req, res) => {
         .catch(err => console.log(err))
 })
 
-// DELETE route
+//* DELETE route
 // Delete -> delete a specific fruit
 app.delete('/fruits/:id', (req, res) => {
     // get the id from the req
@@ -133,7 +133,7 @@ app.delete('/fruits/:id', (req, res) => {
 })
 
 
-//  SHOW route
+//* SHOW route
 // Read -> finds and displays a single resource
 app.get('/fruits/:id', (req, res) => {
     // get the id -> save to a variable
@@ -147,9 +147,6 @@ app.get('/fruits/:id', (req, res) => {
     .catch(err => console.log(err))
     // catch any errors
 })
-
-
-
 
 //! Server Listener
 const PORT = process.env.PORT

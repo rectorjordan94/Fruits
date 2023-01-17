@@ -28,3 +28,20 @@ Controllers - Tell us what we can do and connect our views and our models. We ca
 We're using express framework to build a server, in which we are using mongoose to process our requests and run CRUD operations using a mongoDb database.
 
 What we're building is a REST api, that runs full CRUD operations on a single resource. (This will change, eventually)
+
+## What is REST???
+
+- REST stands for REpresentational State Transfer
+- It's just a set of principles that describe how networked resources are accessed and manipulated
+- We have 7 RESTful routes that allow us basic operations for reading and manipulating a collection of data
+
+| **URL**            | **HTTP Verb** | **Action** |
+|--------------------|---------------|------------|
+| /fruits            | GET           | index      |
+| /fruits/:id        | GET           | show       |
+| /fruits/new        | GET           | new        |
+| /fruits            | POST          | create     |
+| /fruits/:id/edit   | GET           | edit       |
+| /fruits/:id        | PATCH/PUT     | update     |
+| /fruits/:id        | DELETE        | destroy    |
+
