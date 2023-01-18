@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
     Fruit.find({})
         // there's a built in function that runs before the rest of the promise chain
         // this function is called populate, and it's able to retrieve info from documents in other collections
-        .populate('owner', '-pasword')
+        .populate('owner', '-password')
         // send json if successful
         .then(fruits => { res.json({fruits: fruits})})
         // catch errors if they occur
@@ -26,7 +26,6 @@ router.get('/', (req, res) => {
 //* CREATE route
 // Create -> receives a request body, and creates a new document in the database
 router.post('/', (req, res) => {
-    // console.log('this is req.body before owner: \n', req.body)
     // here we'll have something called a request body
     // inside this function, that will be called req.body
     // we want to pass our req.body to the create method
@@ -34,7 +33,6 @@ router.post('/', (req, res) => {
     // luckily for us, we saved the user's id on the session object, so it's really easy for us to access that data
     req.body.owner = req.session.userId
     const newFruit = req.body
-    // console.log('this is req.body aka newFruit after owner \n', newFruit)
     Fruit.create(newFruit)
         .then(fruit => {
             // send a 201 status, along with the json response of the new fruit
