@@ -16,17 +16,22 @@ router.get('/', (req, res) => {
         // catch errors if they occur
         .catch(err => {
             console.log(err)
-            res.status(404).json(err)
+            res.status(400).json(err)
         })
 })
 
 //* CREATE route
 // Create -> receives a request body, and creates a new document in the database
 router.post('/', (req, res) => {
+    // console.log('this is req.body before owner: \n', req.body)
     // here we'll have something called a request body
     // inside this function, that will be called req.body
     // we want to pass our req.body to the create method
+    // we want to add an owner field to our fruit
+    // luckily for us, we saved the user's id on the session object, so it's really easy for us to access that data
+    req.body.owner = req.session.userId
     const newFruit = req.body
+    // console.log('this is req.body aka newFruit after owner \n', newFruit)
     Fruit.create(newFruit)
         .then(fruit => {
             // send a 201 status, along with the json response of the new fruit
@@ -35,7 +40,24 @@ router.post('/', (req, res) => {
         // send an error if one occurs
         .catch(err => {
             console.log(err)
-            res.status(404).json(err)
+            res.status(400).json(err)
+        })
+})
+
+//* GET route
+// Index -> this is a user specific index route
+// this will only show the logged-in user's fruits
+router.get('/mine', (req,res) => {
+    // find fruits by ownership, using the req.session info
+    Fruit.find({ owner: req.session.userId })
+        .then(fruits => {
+            // if found, display the fruits
+            res.status(200).json({fruits: fruits})
+        })
+        .catch(err => {
+            // otherwise throw an error
+            console.log(err)
+            res.status(400).json(err)
         })
 })
 
@@ -58,7 +80,7 @@ router.put('/:id', (req, res) => {
         })
         .catch(err => {
             console.log(err)
-            res.status(404).json(err)
+            res.status(400).json(err)
         })
 })
 
@@ -76,7 +98,7 @@ router.delete('/:id', (req, res) => {
         // send an error if not
         .catch(err => {
             console.log(err)
-            res.status(404).json(err)
+            res.status(400).json(err)
         })
 })
 
@@ -94,7 +116,7 @@ router.get('/:id', (req, res) => {
         })
         .catch(err => {
             console.log(err)
-            res.status(404).json(err)
+            res.status(400).json(err)
         })
     // catch any errors
 })
