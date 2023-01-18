@@ -61,22 +61,45 @@ router.get('/mine', (req,res) => {
         })
 })
 
+// // PUT route
+// // Update -> updates a specific fruit
+// //  PUT replaces the entire document with a new document from the req.body
+// // PATCH is able to update specific fields at specific times, but it requires a little more code to ensure that it works properly, so we'll use that later
+// router.put('/:id', (req, res) => {
+//     // save the id to a variable for easy use later
+//     const id = req.params.id
+//     // save the request body to a variable for easy reference later
+//     const updatedFruit = req.body
+//     // use the mongoose method findByIdAndUpdate
+//     // eventually we'll change how this route works, but for now, we'll do everything in one shot, with findByIdAndUpdate
+//     Fruit.findByIdAndUpdate(id, updatedFruit, { new: true })
+//         .then(fruit => {
+//             console.log('the newly updated fruit: \n', fruit)
+//             // update success message will just be a 204 - no content
+//             res.sendStatus(204)
+//         })
+//         .catch(err => {
+//             console.log(err)
+//             res.status(400).json(err)
+//         })
+// })
+
 //* PUT route
-// Update -> updates a specific fruit
-//  PUT replaces the entire document with a new document from the req.body
-// PATCH is able to update specific fields at specific times, but it requires a little more code to ensure that it works properly, so we'll use that later
+// Update -> updates a specific fruit(only if the fruit's owner is updating)
 router.put('/:id', (req, res) => {
-    // save the id to a variable for easy use later
     const id = req.params.id
-    // save the request body to a variable for easy reference later
-    const updatedFruit = req.body
-    // use the mongoose method findByIdAndUpdate
-    // eventually we'll change how this route works, but for now, we'll do everything in one shot, with findByIdAndUpdate
-    Fruit.findByIdAndUpdate(id, updatedFruit, { new: true })
+    Fruit.findById(id)
         .then(fruit => {
-            console.log('the newly updated fruit: \n', fruit)
-            // update success message will just be a 204 - no content
-            res.sendStatus(204)
+            // if the owner of the fruit is the person who is logged in
+            if (fruit.owner == req.session.userId) {
+                // send success message
+                res.sendStatus(204)
+                // update and save the fruit
+                return fruit.updateOne(req.body)
+            } else {
+                // otherwise send a 401 unauthorized status
+                res.sendStatus(401)
+            }
         })
         .catch(err => {
             console.log(err)
@@ -84,18 +107,24 @@ router.put('/:id', (req, res) => {
         })
 })
 
+
 //* DELETE route
 // Delete -> delete a specific fruit
 router.delete('/:id', (req, res) => {
-    // get the id from the req
     const id = req.params.id
-    // find and delete the fruit
-    Fruit.findByIdAndRemove(id)
-        .then(() => {
-            // send a 204 if successful
-            res.sendStatus(204)
+    Fruit.findById(id)
+        .then(fruit => {
+            // if the owner of the fruit is the person who is logged in
+            if (fruit.owner == req.session.userId) {
+                // send success message
+                res.sendStatus(204)
+                // delete the fruit
+                return fruit.deleteOne()
+            } else {
+                // otherwise send a 401 unauthorized status
+                res.sendStatus(401)
+            }
         })
-        // send an error if not
         .catch(err => {
             console.log(err)
             res.status(400).json(err)
