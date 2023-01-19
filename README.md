@@ -35,6 +35,10 @@ What we're building is a REST api, that runs full CRUD operations on a single re
 - It's just a set of principles that describe how networked resources are accessed and manipulated
 - We have 7 RESTful routes that allow us basic operations for reading and manipulating a collection of data
 
+## Route Tables for Documents
+
+#### Fruits
+
 | **URL**            | **HTTP Verb** | **Action** |
 |--------------------|---------------|------------|
 | /fruits            | GET           | index      |
@@ -44,6 +48,22 @@ What we're building is a REST api, that runs full CRUD operations on a single re
 | /fruits/:id/edit   | GET           | edit       |
 | /fruits/:id        | PATCH/PUT     | update     |
 | /fruits/:id        | DELETE        | destroy    |
+
+#### Comments
+
+| **URL**            | **HTTP Verb** | **Action** |
+|--------------------------------------|------------|------------|
+| /comments/:fruitId                   | POST       | create     |
+| /comments/delete/:fruitId/:commentId | GET        | destroy    |
+
+#### Users
+
+| **URL**            | **HTTP Verb** | **Action** |
+|--------------------|---------------|------------|
+| /users/signup      | POST          | create     |
+| /users/login       | POST          | create     |
+| /users/logout      | DELETE        | destroy    |
+
 
 ## File organization, where are things happening?
 
@@ -59,3 +79,20 @@ The connection between our fruits and mongoDb starts with the file `utils/connec
 ## Middleware
 
 Middleware is processed by a function in the utils directory. `utils/middleware.js` This middleware function takes one argument, app, and processes requests through our middleware
+
+## Relationships
+
+One to many: 
+    - One user can have many fruits
+    - One fruit can have many comments
+
+Fruits are connected to Users through the `fruit.owner` files, via `objectId` reference
+Comments are connected to Fruits, as an array of subdocuments at `fruit.comments`
+Users are connected to comments, via `objectId` reference, at `comment.author`
+
+#### ERD
+
+This is an entity relationship diagram(basic version for now)
+This accurately describes my relationships between my documents(entities)
+
+![entityRelationshipDiagram](images/ERD.png)
