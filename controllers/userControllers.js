@@ -7,6 +7,12 @@ const bcrypt = require('bcryptjs')
 const router = express.Router()
 
 //! Routes
+//* GET -> /users/signup
+// this renders a liquid page with the sign up form
+router.get('/signup', (req, res) => {
+    res.render('users/signup')
+})
+
 //* POST -> /users/signup
 // this route creates new users in our db
 router.post('/signup', async (req, res) => {
@@ -33,6 +39,11 @@ router.post('/signup', async (req, res) => {
             console.log(err)
             res.json(err)
         })
+})
+
+//* GET -> /users/login
+router.get('/login', (req, res) => {
+    res.render('users/login')
 })
 
 //* POST -> /users/login
@@ -80,6 +91,12 @@ router.post('/login', async (req, res) => {
     
 })
 
+//* GET -> /users/logout
+// this route renders a page that allows the user to log out
+router.get('/logout', (req, res) => {
+    res.render('users/logout')
+})
+
 //* DELETE -> /users/logout
 // this route destroys a session in our db(and in the browser)
 router.delete('/logout', (req, res) => {
@@ -87,7 +104,7 @@ router.delete('/logout', (req, res) => {
     req.session.destroy(() => {
         console.log('this is req.session upon logout \n', req.session)
         // eventually we will redirect users here, but thats after adding the view layer
-        res.sendStatus(204)
+        res.redirect('/users/login')
     })
 }) 
 
