@@ -74,8 +74,6 @@ router.delete('/delete/:fruitId/:commId', (req, res) => {
                 // otherwise send a 401 - unauthorized status
                 res.sendStatus(401)
             }
-            
-            
         })
         .catch(err => {
             console.log(err)
