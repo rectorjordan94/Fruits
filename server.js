@@ -23,7 +23,8 @@ middleware(app)
 
 //! Routes
 app.get('/', (req, res) => {
-    res.render('home.liquid')
+    const { username, loggedIn, userId } = req.session
+    res.render('home.liquid', { username, loggedIn, userId })
 })
 
 // This is now where we register our routes, this is how server.js knows to send the correct response
@@ -37,7 +38,8 @@ app.use('/users', UserRouter)
 // gets the error from a url req query
 app.get('/error', (req, res) => {
     const error = req.query.error || 'This page does not exist'
-    res.render('error.liquid', { error })
+    const { username, loggedIn, userId } = req.session
+    res.render('error.liquid', { error, username, loggedIn, userId })
 })
 
 // this catchall route will redirect a user to the error page

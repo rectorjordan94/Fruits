@@ -9,7 +9,9 @@ const router = express.Router()
 //* INDEX route 
 // Read -> finds and displays all fruits
 router.get('/', (req, res) => {
+    const { username, loggedIn, userId } = req.session
     // find all the fruits
+    // console.log(req.session)
     Fruit.find({})
         // there's a built in function that runs before the rest of the promise chain
         // this function is called populate, and it's able to retrieve info from documents in other collections
@@ -19,7 +21,7 @@ router.get('/', (req, res) => {
         .then(fruits => {
             // res.json({ fruits: fruits })
             // now that we have liquid installed, we're going to use render as a response for our controllers
-            res.render('fruits/index', { fruits })
+            res.render('fruits/index', { fruits, username, loggedIn, userId })
         })
         // catch errors if they occur
         .catch(err => {

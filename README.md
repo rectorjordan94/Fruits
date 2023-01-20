@@ -100,28 +100,3 @@ This accurately describes my relationships between my documents(entities)
 
 ![entityRelationshipDiagram](images/ERD.png)
 
-## Views Layer
-
-We're using liquid blah blah blah: 
-
-`{% layout 'layout.liquid' %}
-{% block content %}
-    <!-- we need to account for two conditions here -->
-    <!--first, if we have fruits in our array -->
-    <!-- second, if there are no fruits in the array-->
-    {% if fruits.length > 0 %}
-        <h2>All Fruits</h2>
-        <ul>
-            <!--now we can loop over our array of fruits and produce some html for every fruit we have-->
-            <!-- our {%  %} syntax -> injects logic -->
-            <!-- our {{  }} syntax -> injects data -->
-            {% for fruit in fruits %}
-                <li>{{ fruit.name }} - Color: {{fruit.color}}</li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <h2>No fruits yet... Go create some!</h2>
-    {% endif %}
-{% endblock %}
-
-`
