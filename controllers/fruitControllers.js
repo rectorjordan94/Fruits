@@ -30,6 +30,12 @@ router.get('/', (req, res) => {
         })
 })
 
+//* GET for the new page
+// shows a form where a user can create a new fruit
+router.get('/new', (req, res) => {
+    res.render('fruits/new', {...req.session})
+})
+
 //* CREATE route
 // Create -> receives a request body, and creates a new document in the database
 router.post('/', (req, res) => {
@@ -39,7 +45,13 @@ router.post('/', (req, res) => {
     // we want to add an owner field to our fruit
     // luckily for us, we saved the user's id on the session object, so it's really easy for us to access that data
     req.body.owner = req.session.userId
+
+    // we need to do a little JS magic, to get our checkbox turned into a boolean
+    // here we use a ternary operator to change the on value to send as true
+    // otherwise, make that field false
+    req.body.readyToEat = req.body.readyToEat === 'on' ? true: false
     const newFruit = req.body
+
     Fruit.create(newFruit)
         .then(fruit => {
             // send a 201 status, along with the json response of the new fruit
