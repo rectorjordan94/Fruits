@@ -152,7 +152,7 @@ router.get('/:id', (req, res) => {
         .populate('comments.author', 'username')
         .then(fruit => {
             // send the fruit as json upon success
-            res.json({fruit: fruit})
+            res.render('fruits/show', {fruit, ...req.session})
         })
         .catch(err => {
             console.log(err)
