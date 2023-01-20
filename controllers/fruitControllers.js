@@ -111,23 +111,43 @@ router.get('/mine', (req,res) => {
 //         })
 // })
 
+//* GET request -> EDIT route
+// shows the form for updating a fruit
+router.get('/edit/:id', (req, res) => {
+    // because we're editing a specific fruit, we want to be able to access the fruit's initial values. So we can use that info on the page
+    
+    const fruitId = req.params.id
+    Fruit.findById(fruitId)
+        .then(fruit => {
+            res.render('fruits/edit', { fruit, ...req.session})
+        })
+        .catch(err => {
+            res.redirect(`/error?error=${err}`)
+        })
+})
+
 //* PUT route
 // Update -> updates a specific fruit(only if the fruit's owner is updating)
 router.put('/:id', (req, res) => {
     const id = req.params.id
+    req.body.readyToEat = req.body.readyToEat === 'on' ? true: false
     Fruit.findById(id)
         .then(fruit => {
             // if the owner of the fruit is the person who is logged in
             if (fruit.owner == req.session.userId) {
                 // send success message
-                res.sendStatus(204)
+                // res.sendStatus(204)
                 // update and save the fruit
                 return fruit.updateOne(req.body)
+                // res.redirect('/fruits', { ...req.session})
             } else {
                 // otherwise send a 401 unauthorized status
                 // res.sendStatus(401)
                 res.redirect(`error?error=You%20are%20not%20allowed%20to%20edit%20this%20fruit`)
             }
+        })
+        .then(fruit => {
+            res.redirect(`/fruits/mine`)
         })
         .catch(err => {
             console.log(err)
