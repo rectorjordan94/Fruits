@@ -5,6 +5,7 @@ const session = require('express-session') // import the express-session package
 const MongoStore = require('connect-mongo') // import the connect-mongo package(for sessions)
 require('dotenv').config() // necessary because connect=mongo needs to access the database
 const methodOverride = require('method-override')
+const path = require('path')
 
 //! Middleware Function
 // Now, instead of processing our middleware in server.js, we're going to build a function that will take the entire app as an argument, and run requests through all of our middleware
