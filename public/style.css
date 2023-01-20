@@ -8,3 +8,9 @@ body {
     border-radius: 5px;
     margin: 0 auto;
 }
+
+.fruitInfo {
+    width: 33%;
+    border: 1px solid grey;
+    border-radius: 25px;
+}

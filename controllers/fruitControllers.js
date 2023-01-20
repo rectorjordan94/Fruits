@@ -1,5 +1,7 @@
 //! Import Dependencies
 const express = require('express')
+const axios = require('axios')
+require('dotenv').config()
 const Fruit = require('../models/fruit')
 
 //! Create Router
@@ -115,7 +117,6 @@ router.get('/mine', (req,res) => {
 // shows the form for updating a fruit
 router.get('/edit/:id', (req, res) => {
     // because we're editing a specific fruit, we want to be able to access the fruit's initial values. So we can use that info on the page
-    
     const fruitId = req.params.id
     Fruit.findById(fruitId)
         .then(fruit => {
@@ -185,15 +186,17 @@ router.delete('/:id', (req, res) => {
 
 //* SHOW route
 // Read -> finds and displays a single resource
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
     // get the id -> save to a variable
     const id = req.params.id
     // use a mongoose method to find using that id
     Fruit.findById(id)
         .populate('comments.author', 'username')
-        .then(fruit => {
+        .then(async fruit => {
             // send the fruit as json upon success
-            res.render('fruits/show', {fruit, ...req.session})
+            const fruitInfo = await axios(`${process.env.FRUITY_URL}/${fruit.name}`)
+            const fruitNutrients = fruitInfo.data.error ? false : fruitInfo.data.nutritions
+            res.render('fruits/show', {fruit, fruitNutrients, ...req.session})
         })
         .catch(err => {
             console.log(err)
