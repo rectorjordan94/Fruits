@@ -1,3 +1,10 @@
 body {
     background-color: rgb(179, 245, 184);
 }
+
+.colorBox {
+    height: 25px;
+    width: 50%;
+    border-radius: 5px;
+    margin: 0 auto;
+}
